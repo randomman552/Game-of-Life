@@ -10,7 +10,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9bf58e0b-034f-4fcc-8540-18bb688e4b0c" name="Default Changelist" comment="" />
+    <list default="true" id="9bf58e0b-034f-4fcc-8540-18bb688e4b0c" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/gameoflife.js" beforeDir="false" afterPath="$PROJECT_DIR$/modules/gameoflife.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles.css" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -77,7 +82,8 @@
       <option name="presentableId" value="Default" />
       <updated>1600004598901</updated>
       <workItem from="1600004600020" duration="15848000" />
-      <workItem from="1600026880999" duration="1144000" />
+      <workItem from="1600026880999" duration="1217000" />
+      <workItem from="1600036193285" duration="2751000" />
     </task>
     <servers />
   </component>

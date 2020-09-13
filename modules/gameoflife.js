@@ -1,3 +1,32 @@
+
+//#region Canvas Setup
+
+/**
+ * Canvas Element
+ * @type {HTMLCanvasElement}
+ */
+const canvas = document.getElementById("canvas");
+
+/**
+ * Rendering Context
+ * @type {CanvasRenderingContext2D}
+ */
+const ctx = canvas.getContext("2d");
+
+/**
+ * Resize Action
+ */
+window.addEventListener("resize", () => {
+    canvas.width = document.documentElement.clientWidth;
+    canvas.height = document.documentElement.clientHeight;
+});
+window.dispatchEvent(new Event("resize"));
+
+//#endregion
+
+
+//#region Game Code
+
 /**
  * Cell class.
  */
@@ -36,6 +65,13 @@ export class Cell{
 
     /**
      * Check this cell to see if it will make it to the next iteration.
+     *
+     * The rules:
+     *  Live cell with less than 2 neighbors dies,
+     *  Live cell with 2 or 3 live neighbors lives on,
+     *  Live cell with more than 3 neighbors dies,
+     *  Dead cell with 3 neighbors becomes alive,
+     *
      * @param liveCells {Cell[]}
      * @returns {boolean} True if cell is alive next round.
      */
@@ -51,27 +87,61 @@ export class Cell{
             }
         }
 
-        //If at least two neighbors are alive, return true.
-        return liveNeighbors >= 2;
+
+        const alive = this.isAlive(liveCells);
+        return alive && liveNeighbors >= 2 && liveNeighbors <= 3 || !alive && liveNeighbors === 3;
+    }
+
+
+    /**
+     * Check if this cell is alive.
+     * @param liveCells {Cell[]} The list of living cells
+     * @returns {boolean} True if cell is alive.
+     */
+    isAlive(liveCells) {
+        for (const liveCell of liveCells) {
+            if (this.isEqual(liveCell)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
     /**
      * Get the neighbors of this cell.
+     * In this diagram, cell X has all of the other cells as neighbors.
+     *  [ ][ ][ ]
+     *  [ ][x][ ]
+     *  [ ][ ][ ]
      * @returns {[]}
      */
     get neighbors() {
         let results = []
 
-        results.push(new Cell(this.x - 1, this.y));
-        results.push(new Cell(this.x + 1, this.y));
-        results.push(new Cell(this.x, this.y - 1));
-        results.push(new Cell(this.x, this.y + 1));
+        /**
+         * Array of transformations to apply to this cell to get it's neighbors.
+         */
+        let transforms =  [
+            //X transforms
+            [-1, 0], [1, 0],
+            //Y transforms
+            [0, -1], [0, 1],
+            //Diagonal transforms
+            [1, 1], [-1, 1], [-1, -1], [1, -1]]
+
+        for (const t of transforms) {
+            results.push(new Cell(this.x + t[0], this.y + t[1]))
+        }
 
         return results;
     }
 }
 
+/**
+ * Class representing the game
+ * Requires a canvas with the id 'canvas' as part of the DOM, this is where all cells will be drawn.
+ */
 export class GameOfLife {
     /**
      * Array of the living cells in the game.
@@ -122,3 +192,5 @@ export class GameOfLife {
         this.checkedCells.clear();
     }
 }
+
+//#endregion
