@@ -35,6 +35,18 @@ export class Cell{
     y;
 
     /**
+     * Fill style for all cells.
+     * @type {string}
+     */
+    static fillStyle = "white";
+
+    /**
+     * Size of each cell in pixels (used for cell drawing).
+     * @type {number}
+     */
+    static cellSize = 50;
+
+    /**
      * @param x The X coordinate of this cell
      * @param y The y coordinate of this cell
      */
@@ -145,13 +157,13 @@ export class Cell{
 export class GameOfLife {
     /**
      * Array of the living cells in the game.
-     * @type Array
+     * @type Cell[]
      */
     liveCells;
 
     /**
      * Array of the living cells for the next iteration of the game.
-     * @type Array
+     * @type Cell[]
      */
     nextLiveCells;
 
@@ -190,6 +202,33 @@ export class GameOfLife {
         this.liveCells = this.nextLiveCells;
         this.nextLiveCells = [];
         this.checkedCells.clear();
+    }
+
+    /**
+     * Draw a frame on the canvas.
+     */
+    drawFrame() {
+        //Clear the screen
+        ctx.beginPath();
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+        //Calculate draw offset
+        const drawOffset = [
+            (ctx.canvas.width / 2) - (50 / 2) + 1,
+            (ctx.canvas.height / 2) - (50 / 2) + 1
+        ];
+
+
+        for (const cell of this.liveCells) {
+            ctx.rect((cell.x * Cell.cellSize) + drawOffset[0], (cell.y * Cell.cellSize) + drawOffset[1], Cell.cellSize - 2, Cell.cellSize - 2);
+
+            //Set fill and stroke styles according to the values in the Cell class.
+            ctx.fillStyle = Cell.fillStyle;
+
+            //Fill and stroke the cell
+            ctx.fill();
+        }
+        ctx.closePath();
     }
 }
 
