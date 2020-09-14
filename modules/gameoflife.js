@@ -67,7 +67,7 @@ export class Cell{
 
     /**
      * Check if this cell is equal to the given cell.
-     * @param cell2
+     * @param cell2 {Cell}
      * @returns {boolean}
      */
     isEqual(cell2) {
@@ -156,53 +156,61 @@ export class Cell{
  */
 export class GameOfLife {
     /**
-     * Array of the living cells in the game.
-     * @type Cell[]
+     * Stores information on all cells in the game.
+     * @type {{next: Cell[], checked: Set, live: Cell[]}}
+     * @property {Cell[]} live Array containing all live cells.
+     * @property {Cell[]} next Array containing the live cells for the next generation.
+     * @property {Set} checked Set containing all checked cells for this generation (as strings).
      */
-    liveCells;
-
-    /**
-     * Array of the living cells for the next iteration of the game.
-     * @type Cell[]
-     */
-    nextLiveCells;
-
-    /**
-     * Set of checked cells (stored as strings to prevent duplicates).
-     * @type Set
-     */
-    checkedCells;
-
-    constructor() {
-        this.liveCells = [];
-        this.nextLiveCells = [];
-        this.checkedCells = new Set();
+    cells = {
+        live: [],
+        next: [],
+        checked: new Set()
     }
+
+
+    /**
+     * Stores game loop interval information.
+     * @type {{id: number, time: number}}
+     * @property {number} id The ID of the currently active interval.
+     * If no interval is active then it will be 0.
+     * @property {number} time The time between loop executions (in ms).
+     */
+    interval = {
+        id: 0,
+        time: 1000
+    };
+
+
+    constructor() {}
+
 
     /**
      * Iterate the progress of the game by 1 iteration.
      */
     iterateCells() {
         //Check the neighbors of each live cell
-        for (const liveCell of this.liveCells) {
+        for (const liveCell of this.cells.live) {
             for (const checking of liveCell.neighbors) {
                 //Check the cell if it hasn't already been checked
-                if(!this.checkedCells.has(checking.toString()) && checking.check(this.liveCells)) {
-                    this.nextLiveCells.push(checking);
-                    this.checkedCells.add(checking.toString());
+                if(!this.cells.checked.has(checking.toString()) && checking.check(this.cells.live)) {
+                    this.cells.next.push(checking);
+                    this.cells.checked.add(checking.toString());
                 }
             }
         }
     }
 
+
     /**
      * Move on to the next iteration and update the live cells.
      */
     updateCells() {
-        this.liveCells = this.nextLiveCells;
-        this.nextLiveCells = [];
-        this.checkedCells.clear();
+        this.cells.live = this.cells.next;
+        this.cells.next = [];
+        this.cells.checked.clear();
     }
+
 
     /**
      * Draw a frame on the canvas.
@@ -219,7 +227,7 @@ export class GameOfLife {
         ];
 
 
-        for (const cell of this.liveCells) {
+        for (const cell of this.cells.live) {
             ctx.rect((cell.x * Cell.cellSize) + drawOffset[0], (cell.y * Cell.cellSize) + drawOffset[1], Cell.cellSize - 2, Cell.cellSize - 2);
 
             //Set fill and stroke styles according to the values in the Cell class.
@@ -229,6 +237,56 @@ export class GameOfLife {
             ctx.fill();
         }
         ctx.closePath();
+    }
+
+
+    /**
+     * Advance the game, and draw the frame of the next generation.
+     */
+    advance() {
+        this.iterateCells();
+        this.updateCells();
+        this.drawFrame();
+    }
+
+
+    /**
+     * This method starts the main game loop as an interval in the background.
+     */
+    start() {
+        if (!this.interval.id) {
+            this.interval.id = setInterval(() => {
+                this.advance();
+            }, this.interval.time);
+
+            //Draw the first frame NOW as the second will not be drawn until the next interval is called.
+            this.drawFrame();
+        }
+    }
+
+
+    /**
+     * This method stops the main game loop interval.
+     */
+    stop() {
+        if (this.interval.id) {
+            clearInterval(this.interval.id)
+            this.interval.id = 0;
+        }
+    }
+
+
+    /**
+     * Set the new game loop interval time.
+     * @param val {number} The new interval time value
+     */
+    setLoopTime(val) {
+        this.interval.time = val;
+
+        if (this.interval.id) {
+            this.stop();
+            this.start();
+        }
     }
 }
 

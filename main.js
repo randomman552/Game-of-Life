@@ -2,7 +2,7 @@ import { Cell, GameOfLife } from "./modules/gameoflife.js"
 
 let game = new GameOfLife();
 
-game.liveCells = [
+game.cells.live = [
     new Cell(-1, 0),
     new Cell(0, 0),
     new Cell(1, 0),
@@ -10,14 +10,11 @@ game.liveCells = [
     new Cell(0, -1)
 ]
 
-console.log(game.liveCells);
 
+game.start();
+game.setLoopTime(250);
 
-function updateFrame() {
-    game.iterateCells();
-    game.updateCells();
-    game.drawFrame();
-}
-
-setInterval(updateFrame, 1000);
-game.drawFrame();
+//Add resize listener to redraw current frame when resizing the canvas.
+window.addEventListener("resize", () => {
+    game.drawFrame()
+});
