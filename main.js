@@ -1,6 +1,7 @@
 import { Cell, GameOfLife } from "./modules/gameoflife.js"
 
-let game = new GameOfLife(document.getElementById("canvas"));
+const canvas = document.getElementById("canvas");
+let game = new GameOfLife(canvas);
 
 
 //Add resize listener to redraw current frame when resizing the canvas.
@@ -60,6 +61,7 @@ const modeSwitchButton = document.getElementById("move/select");
 function switchMode() {
     game.toggleMoveMode()
     modeSwitchButton.classList.toggle("active");
+    canvas.classList.toggle("move");
 }
 
 modeSwitchButton.addEventListener("click", switchMode);
@@ -69,7 +71,7 @@ modeSwitchButton.addEventListener("click", switchMode);
 
 //#region Click event binding
 
-document.getElementById("canvas").addEventListener("click", (e) => {
+document.getElementById("canvas").addEventListener("pointerdown", (e) => {
    game.clickAction(e);
 });
 

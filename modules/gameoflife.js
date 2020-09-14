@@ -229,14 +229,15 @@ export class GameOfLife {
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
         //Calculate draw offset
-        const drawOffset = [
-            (ctx.canvas.width / 2) - (50 / 2) + 1,
-            (ctx.canvas.height / 2) - (50 / 2) + 1
-        ];
+        const drawOffset = this.drawOffset;
 
 
         for (const cell of this.cells.live) {
-            ctx.rect((cell.x * Cell.cellSize) + drawOffset[0], (cell.y * Cell.cellSize) + drawOffset[1], Cell.cellSize - 2, Cell.cellSize - 2);
+            ctx.rect(
+                (cell.x * Cell.cellSize) + drawOffset[0],
+                (cell.y * Cell.cellSize) + drawOffset[1],
+                Cell.cellSize - 2,
+                Cell.cellSize - 2);
 
             //Set fill and stroke styles according to the values in the Cell class.
             ctx.fillStyle = Cell.fillStyle;
@@ -311,14 +312,59 @@ export class GameOfLife {
      * @param e {MouseEvent}
      */
     clickAction(e) {
-        const offset = [
-            (this.camera.ctx.canvas.width / 2) - (50 / 2),
-            (this.camera.ctx.canvas.height / 2) - (50 / 2)
-        ];
+        //Calculate draw offset
+        const offset = this.drawOffset;
 
         if (this.camera.moveMode) {
-            //TODO Camera moving code
+            //Camera moving code
+
+            //Store mouse down position
+            let start = {
+                x: e.x,
+                y: e.y
+            }
+
+
+            //Store old camera position
+            let oldPos = {
+                x: this.camera.pos.x,
+                y: this.camera.pos.y
+            }
+
+
+            /**
+             * Function to be called on pointer move.
+             */
+            const onMove = (e) => {
+                //Update camera position
+                this.camera.pos.x = oldPos.x + (e.x - start.x);
+                this.camera.pos.y = oldPos.y + (e.y - start.y);
+
+                //Move canvas background with dragging
+                this.camera.canvas.style.backgroundPosition = `calc(50% + ${this.camera.pos.x}px) calc(50% + ${this.camera.pos.y}px)`;
+                this.drawFrame();
+            }
+
+
+            /**
+             * Function to be called once drag has stopped.
+             */
+            const onUp = () => {
+                //Remove the event handlers added earlier
+                this.camera.canvas.removeEventListener("pointermove", onMove);
+                this.camera.canvas.removeEventListener("pointerup", onUp);
+                this.camera.canvas.removeEventListener("pointerout", onUp);
+            }
+
+
+            //Add the required event handlers
+            this.camera.canvas.addEventListener("pointermove", onMove);
+            this.camera.canvas.addEventListener("pointerup", onUp);
+            this.camera.canvas.addEventListener("pointerout", onUp);
+
         } else {
+            //Activate the required cell
+
             //Get the clicked x and x position for the cell.
             let cellX = Math.floor((e.x - offset[0]) / Cell.cellSize);
             let cellY = Math.floor((e.y - offset[1]) / Cell.cellSize);
@@ -341,6 +387,18 @@ export class GameOfLife {
             this.cells.live.push(curCell);
             this.drawFrame();
         }
+    }
+
+
+    /**
+     * Draw offset used when drawing elements on the canvas.
+     * @returns {number[]}
+     */
+    get drawOffset() {
+        return [
+            (this.camera.ctx.canvas.width / 2) - (Cell.cellSize / 2) + (this.camera.pos.x) + 1,
+            (this.camera.ctx.canvas.height / 2) - (Cell.cellSize / 2) + (this.camera.pos.y) + 1
+        ];
     }
 }
 
