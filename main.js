@@ -1,21 +1,13 @@
 import { Cell, GameOfLife } from "./modules/gameoflife.js"
 
-let game = new GameOfLife();
+let game = new GameOfLife(document.getElementById("canvas"));
 
-game.cells.live = [
-    new Cell(-1, 0),
-    new Cell(0, 0),
-    new Cell(1, 0),
-    new Cell(0, 1),
-    new Cell(0, -1)
-]
-
-game.start();
 
 //Add resize listener to redraw current frame when resizing the canvas.
 window.addEventListener("resize", () => {
     game.drawFrame()
 });
+
 
 //#region Play/Pause Action
 
@@ -24,14 +16,13 @@ const pauseButton = document.getElementById("pause/play");
 function togglePlay() {
     if (game.interval.id) {
         game.stop();
-        pauseButton.classList.remove("active");
     } else {
         game.start();
-        pauseButton.classList.add("active");
     }
+    pauseButton.classList.toggle("active");
 }
 
-pauseButton.addEventListener("click", togglePlay)
+pauseButton.addEventListener("click", togglePlay);
 
 //#endregion
 
@@ -58,5 +49,28 @@ function updateTimeScale() {
 
 timeScaleIn.addEventListener("input", updateTimeScale);
 timeScaleIn.dispatchEvent(new Event("input"));
+
+//#endregion
+
+
+//#region Move/Select Button
+
+const modeSwitchButton = document.getElementById("move/select");
+
+function switchMode() {
+    game.toggleMoveMode()
+    modeSwitchButton.classList.toggle("active");
+}
+
+modeSwitchButton.addEventListener("click", switchMode);
+
+//#endregion
+
+
+//#region Click event binding
+
+document.getElementById("canvas").addEventListener("click", (e) => {
+   game.clickAction(e);
+});
 
 //#endregion

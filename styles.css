@@ -61,7 +61,7 @@ label.icon[for="timescale"]::before {
     mask-image: url("assets/icons/clock.svg");
 }
 
-/* Pause/play button styles */
+/* Button styles */
 button {
     cursor: pointer;
     border-radius: 5px;
@@ -87,6 +87,7 @@ button.control:hover::before {
     background-color: rgba(79, 79, 79, 0.75);
 }
 
+/* Pause/play button ::before styles*/
 button.control.pause.active::before {
     mask-image: url("assets/icons/pause.svg");
     -webkit-mask-image: url("assets/icons/pause.svg");
@@ -95,4 +96,15 @@ button.control.pause.active::before {
 button.control.pause::before {
     mask-image: url("assets/icons/play.svg");
     -webkit-mask-image: url("assets/icons/play.svg");
+}
+
+/* Move/select button ::before styles */
+button.control.move.active::before {
+    mask-image: url("assets/icons/cursor-move.svg");
+    -webkit-mask-image: url("assets/icons/cursor-move.svg");
+}
+
+button.control.move::before {
+    mask-image: url("assets/icons/cursor-hand.svg");
+    -webkit-mask-image: url("assets/icons/cursor-hand.svg");
 }

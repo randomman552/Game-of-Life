@@ -1,30 +1,3 @@
-
-//#region Canvas Setup
-
-/**
- * Canvas Element
- * @type {HTMLCanvasElement}
- */
-const canvas = document.getElementById("canvas");
-
-/**
- * Rendering Context
- * @type {CanvasRenderingContext2D}
- */
-const ctx = canvas.getContext("2d");
-
-/**
- * Resize Action
- */
-window.addEventListener("resize", () => {
-    canvas.width = document.documentElement.clientWidth;
-    canvas.height = document.documentElement.clientHeight;
-});
-window.dispatchEvent(new Event("resize"));
-
-//#endregion
-
-
 //#region Game Code
 
 /**
@@ -182,7 +155,40 @@ export class GameOfLife {
     };
 
 
-    constructor() {}
+    /**
+     * Stores information about the camera and it's movement.
+     * @type {{pos: {x: number, y: number}, moveMode: boolean, zoom: number, ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement}}
+     * @property {boolean} moveMode Whether the user is currently in moving mode (changes onClick behavior).
+     * @property {number} zoom The zoom multiplier currently in use.
+     * @property {{x: number, y: number}} pos The current position of the camera.
+     * @property {CanvasRenderingContext2D} ctx The canvas rendering context.
+     * @property {HTMLCanvasElement} canvas The canvas in use by the game.
+     */
+    camera = {
+        moveMode: false,
+        pos: {
+          x: 0,
+          y: 0
+        },
+        zoom: 1,
+        canvas: null,
+        ctx: null
+    };
+
+
+    /**
+     * @param canvas {HTMLCanvasElement}
+     */
+    constructor(canvas) {
+        this.camera.ctx = canvas.getContext("2d")
+        this.camera.canvas = canvas;
+
+        window.addEventListener("resize", () => {
+            canvas.width = document.documentElement.clientWidth;
+            canvas.height = document.documentElement.clientHeight;
+        });
+        window.dispatchEvent(new Event("resize"));
+    }
 
 
     /**
@@ -216,6 +222,8 @@ export class GameOfLife {
      * Draw a frame on the canvas.
      */
     drawFrame() {
+        let ctx = this.camera.ctx;
+
         //Clear the screen
         ctx.beginPath();
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -286,6 +294,52 @@ export class GameOfLife {
         if (this.interval.id) {
             this.stop();
             this.start();
+        }
+    }
+
+
+    /**
+     * Toggle movement mode
+     */
+    toggleMoveMode() {
+        this.camera.moveMode = !this.camera.moveMode;
+    }
+
+
+    /**
+     * Game click action
+     * @param e {MouseEvent}
+     */
+    clickAction(e) {
+        const offset = [
+            (this.camera.ctx.canvas.width / 2) - (50 / 2),
+            (this.camera.ctx.canvas.height / 2) - (50 / 2)
+        ];
+
+        if (this.camera.moveMode) {
+            //TODO Camera moving code
+        } else {
+            //Get the clicked x and x position for the cell.
+            let cellX = Math.floor((e.x - offset[0]) / Cell.cellSize);
+            let cellY = Math.floor((e.y - offset[1]) / Cell.cellSize);
+
+            //Create the current cell as an object and get it's string representation.
+            const curCell = new Cell(cellX, cellY);
+
+            //If the cell is already alive, remove it from the live array and return.
+            //We also draw the next frame so that the cell state changes on screen.
+            for (let i = 0; i < this.cells.live.length; i++) {
+                const liveCell = this.cells.live[i];
+                if (curCell.isEqual(liveCell)) {
+                    this.cells.live.splice(i, 1);
+                    this.drawFrame();
+                    return;
+                }
+            }
+
+            //If the cell is not already alive, add it to the live cells array.
+            this.cells.live.push(curCell);
+            this.drawFrame();
         }
     }
 }
