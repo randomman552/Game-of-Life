@@ -14,6 +14,12 @@ export class Cell{
     static fillStyle = "white";
 
     /**
+     * Stroke style for all cells.
+     * @type {string}
+     */
+    static strokeStyle = "grey";
+
+    /**
      * Size of each cell in pixels (used for cell drawing).
      * @type {number}
      */
@@ -123,6 +129,9 @@ export class Cell{
     }
 }
 
+//TODO: Fix bug on canvas background for zooming below a scalar 0.3
+//TODO: Add save and load features
+
 /**
  * Class representing the game
  * Requires a canvas with the id 'canvas' as part of the DOM, this is where all cells will be drawn.
@@ -227,24 +236,35 @@ export class GameOfLife {
         //Clear the screen
         ctx.beginPath();
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.closePath();
 
         //Calculate draw offset
         const drawOffset = this.drawOffset;
 
 
+        //Calculate scaled cell size
+        const cellSize = Cell.cellSize * this.camera.zoom;
+
+        ctx.beginPath();
+
+        //Set fill and stroke styles according to the values in the Cell class.
+        ctx.fillStyle = Cell.fillStyle;
+        ctx.lineWidth = Math.ceil(this.camera.zoom);
+        ctx.strokeStyle = Cell.strokeStyle;
+
         for (const cell of this.cells.live) {
             ctx.rect(
-                (cell.x * Cell.cellSize) + drawOffset[0],
-                (cell.y * Cell.cellSize) + drawOffset[1],
-                Cell.cellSize - 2,
-                Cell.cellSize - 2);
-
-            //Set fill and stroke styles according to the values in the Cell class.
-            ctx.fillStyle = Cell.fillStyle;
-
-            //Fill and stroke the cell
-            ctx.fill();
+                (cell.x * cellSize) + drawOffset[0],
+                (cell.y * cellSize) + drawOffset[1],
+                cellSize,
+                cellSize);
         }
+
+
+        //Fill and stroke the cells
+        ctx.fill();
+        ctx.stroke();
+
         ctx.closePath();
     }
 
@@ -300,6 +320,22 @@ export class GameOfLife {
 
 
     /**
+     * Set the cameras zoom scalar.
+     * This method MUST be called to change the zoom scale, as it also updates the canvas with the new cell size.
+     * @param val {number} The new scalar.
+     */
+    setCameraZoom(val) {
+        //Update zoom values
+        this.camera.zoom = val;
+
+        //Re-calculate canvas background position and size
+        this.camera.canvas.style.backgroundSize = `${Cell.cellSize * val}px ${Cell.cellSize * val}px`;
+        this.camera.canvas.style.backgroundPosition =
+            `calc(50% + ${this.camera.pos.x * this.camera.zoom}px) calc(50% + ${this.camera.pos.y * this.camera.zoom}px)`;
+    }
+
+
+    /**
      * Toggle movement mode
      */
     toggleMoveMode() {
@@ -337,11 +373,12 @@ export class GameOfLife {
              */
             const onMove = (e) => {
                 //Update camera position
-                this.camera.pos.x = oldPos.x + (e.x - start.x);
-                this.camera.pos.y = oldPos.y + (e.y - start.y);
+                this.camera.pos.x = oldPos.x + ((e.x - start.x) / this.camera.zoom);
+                this.camera.pos.y = oldPos.y + ((e.y - start.y) / this.camera.zoom);
 
                 //Move canvas background with dragging
-                this.camera.canvas.style.backgroundPosition = `calc(50% + ${this.camera.pos.x}px) calc(50% + ${this.camera.pos.y}px)`;
+                this.camera.canvas.style.backgroundPosition =
+                    `calc(50% + ${this.camera.pos.x * this.camera.zoom}px) calc(50% + ${this.camera.pos.y * this.camera.zoom}px)`;
                 this.drawFrame();
             }
 
@@ -366,8 +403,8 @@ export class GameOfLife {
             //Activate the required cell
 
             //Get the clicked x and x position for the cell.
-            let cellX = Math.floor((e.x - offset[0]) / Cell.cellSize);
-            let cellY = Math.floor((e.y - offset[1]) / Cell.cellSize);
+            let cellX = Math.floor((e.x - offset[0]) / (Cell.cellSize * this.camera.zoom));
+            let cellY = Math.floor((e.y - offset[1]) / (Cell.cellSize * this.camera.zoom));
 
             //Create the current cell as an object and get it's string representation.
             const curCell = new Cell(cellX, cellY);
@@ -395,9 +432,15 @@ export class GameOfLife {
      * @returns {number[]}
      */
     get drawOffset() {
+        const scaledCellSize = Cell.cellSize * this.camera.zoom;
+        const scaledCameraPos = {
+            x: this.camera.pos.x * this.camera.zoom,
+            y: this.camera.pos.y * this.camera.zoom
+        }
+
         return [
-            (this.camera.ctx.canvas.width / 2) - (Cell.cellSize / 2) + (this.camera.pos.x) + 1,
-            (this.camera.ctx.canvas.height / 2) - (Cell.cellSize / 2) + (this.camera.pos.y) + 1
+            (this.camera.ctx.canvas.width / 2) - (scaledCellSize / 2) + (scaledCameraPos.x),
+            (this.camera.ctx.canvas.height / 2) - (scaledCellSize / 2) + (scaledCameraPos.y)
         ];
     }
 }

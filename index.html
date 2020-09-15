@@ -9,15 +9,20 @@
 <body>
     <canvas id="canvas">This browser does not support canvas.</canvas>
     <nav class="bottom">
-        <div class="input-container" title="Pause/play">
-            <button id="pause/play" class="control pause"></button>
+
+        <div class="input-group" title="Time controls">
+            <button id="start/stop" title="Pause or play simulation">Start</button>
+            <button id="step" title="Iterate simulation">Step</button>
+            <label for="timescale">Time Scale:</label>
+            <input title="The simulation rate used when running" type="range" name="timescale"
+                   id="timescale" max="100" min="1" step="any">
         </div>
-        <div class="input-container" title="Time Scale">
-            <label class="icon" for="timescale"></label>
-            <input type="range" name="timescale" id="timescale" max="100" min="1" step="any">
-        </div>
-        <div class="input-container" title="Move/Select Mode">
-            <button id="move/select" class="control move"></button>
+
+        <div class="input-group" title="Camera controls">
+            <button id="move/select" title="Toggle movement mode">Move Mode</button>
+            <label for="zoom">Zoom:</label>
+            <input title="Zoom level"
+                    type="range" name="zoom" id="zoom" min="0.5" max="5" value="1" step="any">
         </div>
     </nav>
 </body>

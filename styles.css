@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
 body {
     margin: 0;
     padding: 0;
@@ -5,6 +7,13 @@ body {
     height: 100vh;
     overflow: hidden;
     background-color: rgb(240, 240, 240);
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+}
+
+* {
+    font-family: inherit;
+    font-size: inherit;
 }
 
 /* Canvas Styles */
@@ -12,6 +21,9 @@ body {
     width: 100%;
     height: 100%;
     background: repeat center url("assets/blank-cell.png");
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
 }
 
 #canvas.move {
@@ -31,85 +43,42 @@ nav.bottom {
     height: 60px;
     padding: 5px 20px 5px 20px;
     background-color: rgba(127, 127, 150, 1);
+    color: white;
 }
 
 /* Input container styles */
-nav .input-container {
+nav .input-group {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0 5px 0 5px;
-}
-
-nav .input-container label.icon {
-    width: 30px;
-    height: 30px;
-    position: relative;
-}
-
-label.icon::before,
-button.control::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
+    padding: 0 5px 0 5px;
+    border-right: 1px solid rgba(200, 200, 200, 1);
     height: 100%;
-    background-color: rgba(50, 50, 50, 1);
-    -webkit-mask-size: 100% 100%;
-    mask-size: 100% 100%;
 }
 
-/* Style for icon labels next to controls */
-label.icon[for="timescale"]::before {
-    -webkit-mask-image: url("assets/icons/clock.svg");
-    mask-image: url("assets/icons/clock.svg");
+nav .input-group:last-child {
+    border-right: none;
 }
 
 /* Button styles */
 button {
     cursor: pointer;
     border-radius: 5px;
+    padding: 5px 10px 5px 10px;
     transition: 0.3s;
-    background-color: rgba(230, 230, 255, 0.75);
+    background-color: rgba(180, 180, 200, 0.75);
+    color: rgb(75, 75, 55);
     border: none;
+    text-transform: capitalize;
+    margin: 2px;
 }
 
 button:hover {
-    background-color: rgba(180, 180, 200, 0.75);
+    background-color: rgba(230, 230, 255, 0.75);
+    color: rgba(25, 25, 25, 1);
 }
 
-button.control {
-    position: relative;
-    margin: 0;
-    padding: 0;
-    height: 35px;
-    width: 35px;
-}
-
-button.control:hover::before {
-    transition: inherit;
-    background-color: rgba(79, 79, 79, 0.75);
-}
-
-/* Pause/play button ::before styles*/
-button.control.pause.active::before {
-    mask-image: url("assets/icons/pause.svg");
-    -webkit-mask-image: url("assets/icons/pause.svg");
-}
-
-button.control.pause::before {
-    mask-image: url("assets/icons/play.svg");
-    -webkit-mask-image: url("assets/icons/play.svg");
-}
-
-/* Move/select button ::before styles */
-button.control.move.active::before {
-    mask-image: url("assets/icons/cursor-move.svg");
-    -webkit-mask-image: url("assets/icons/cursor-move.svg");
-}
-
-button.control.move::before {
-    mask-image: url("assets/icons/cursor-hand.svg");
-    -webkit-mask-image: url("assets/icons/cursor-hand.svg");
+/* Label styles */
+label {
+    margin: 0 2px 0 5px;
 }

@@ -12,6 +12,13 @@
   <component name="ChangeListManager">
     <list default="true" id="9bf58e0b-034f-4fcc-8540-18bb688e4b0c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/icons/clock.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/icons/cursor-hand.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/icons/cursor-move.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/icons/desktop.ini" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/icons/pause.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/icons/play.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/main.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/gameoflife.js" beforeDir="false" afterPath="$PROJECT_DIR$/modules/gameoflife.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles.css" afterDir="false" />
@@ -86,7 +93,9 @@
       <workItem from="1600036193285" duration="3050000" />
       <workItem from="1600041585729" duration="2506000" />
       <workItem from="1600077313989" duration="18524000" />
-      <workItem from="1600110974709" duration="3031000" />
+      <workItem from="1600110974709" duration="4085000" />
+      <workItem from="1600162656378" duration="9829000" />
+      <workItem from="1600191058636" duration="3280000" />
     </task>
     <task id="LOCAL-00001" summary="Implement cell drawing">
       <created>1600079415099</created>
