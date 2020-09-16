@@ -106,8 +106,11 @@ zoomInput.dispatchEvent(new Event("input"));
 //Mouse wheel zooming event
 canvas.addEventListener("wheel", (e) => {
     let scale = game.camera.zoom + e.deltaY * -0.01;
-    if (!(scale <= Number(zoomInput.min))) {
+    if (!(scale < Number(zoomInput.min))) {
         zoomInput.value = scale;
+        updateZoom();
+    } else {
+        zoomInput.value = zoomInput.min;
         updateZoom();
     }
 });
@@ -119,6 +122,73 @@ canvas.addEventListener("wheel", (e) => {
 
 document.getElementById("canvas").addEventListener("pointerdown", (e) => {
    game.clickAction(e);
+});
+
+//#endregion
+
+
+//#region Save functionality
+
+const saveButton = document.getElementById("save");
+
+saveButton.addEventListener("click", () => {
+    //Get the save data as a JSON encoded string.
+    const toSave = JSON.stringify(game.save());
+
+    //Create a blob object to store the data
+    const file = new Blob([toSave], {type: "application/json"})
+
+    //Create a temporary anchor tag to download the file
+    const tempLink = document.createElement("a");
+    tempLink.download = "save.json";
+    tempLink.href = window.URL.createObjectURL(file);
+    tempLink.click();
+});
+
+//#endregion
+
+
+//#region Load functionality
+
+const loadButton = document.getElementById("load");
+
+loadButton.addEventListener("click", () => {
+    //Create file input so we can open file dialog
+    const fileIn = document.createElement("input");
+    fileIn.type = "file";
+    fileIn.accept = "application/json"
+
+    //Attach event handler to load the game state when the opened file is read.
+    fileIn.addEventListener("change", () => {
+        const fr = new FileReader();
+        fr.readAsText(fileIn.files[0])
+
+        //Once the file reader has read the contents of the file, load them into the game
+        fr.onload = function() {
+            const toLoad = JSON.parse(fr.result);
+
+            //Convert generic objects into cells before loading them
+            for (let i = 0; i < toLoad.cells.length; i++) {
+                toLoad.cells[i] = new Cell(toLoad.cells[i].x, toLoad.cells[i].y);
+            }
+
+            game.load(toLoad);
+        };
+    });
+
+    //Open file dialog
+    fileIn.click();
+});
+
+//#endregion
+
+
+//#region Clear functionality
+
+const clearButton = document.getElementById("clear");
+
+clearButton.addEventListener("click", () => {
+   game.clear();
 });
 
 //#endregion

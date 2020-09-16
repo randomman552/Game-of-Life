@@ -130,7 +130,7 @@ export class Cell{
 }
 
 //TODO: Fix bug on canvas background for zooming below a scalar 0.3
-//TODO: Add save and load features
+//TODO: Add example loading
 
 /**
  * Class representing the game
@@ -442,6 +442,54 @@ export class GameOfLife {
             (this.camera.ctx.canvas.width / 2) - (scaledCellSize / 2) + (scaledCameraPos.x),
             (this.camera.ctx.canvas.height / 2) - (scaledCellSize / 2) + (scaledCameraPos.y)
         ];
+    }
+
+
+    /**
+     * Load a previously saved game state.
+     * @param toLoad {{cells: Cell[], camera: {pos: {x: number, y: number}, zoom: number}}}
+     */
+    load(toLoad) {
+        this.cells.next = toLoad.cells;
+        this.camera.pos = toLoad.camera.pos;
+
+        //Set camera zoom to prevent background errors
+        this.setCameraZoom(toLoad.camera.zoom);
+
+        //Update cells to reset the cell states
+        this.updateCells();
+
+        //Re-draw the current frame to show the user the updated game state
+        this.drawFrame();
+    }
+
+
+    /**
+     * Returns the game state as an object.
+     * This game state object can then be loaded with the load method at any time.
+     * @returns {{cells: Cell[], camera: {pos: {x: number, y: number}, zoom: number}}}
+     */
+    save() {
+        return {
+            cells: this.cells.live,
+            camera: {
+                pos: {
+                    x: this.camera.pos.x,
+                    y: this.camera.pos.y
+                },
+                zoom: this.camera.zoom
+            }
+        };
+    }
+
+
+    /**
+     * Clear the game board
+     */
+    clear() {
+       this.cells.next = [];
+       this.updateCells();
+       this.drawFrame();
     }
 }
 
