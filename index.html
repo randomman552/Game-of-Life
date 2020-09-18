@@ -5,6 +5,7 @@
     <title>Game of Life</title>
     <link rel="stylesheet" href="styles.css">
     <script src="main.js" type="module" defer></script>
+    <script src="modules/popup.js" defer></script>
 </head>
 <body>
     <canvas id="canvas">This browser does not support canvas.</canvas>
@@ -27,9 +28,31 @@
 
         <div class="input-group" title="Board controls">
             <button id="save">Save</button>
-            <button id="load">Load</button>
+            <button id="load" onclick="togglePopup('load-popup');">Load</button>
             <button id="clear">Clear</button>
         </div>
     </nav>
+
+    <div class="popup-container">
+        <div id="load-popup" class="popup">
+            <header>Load</header>
+                <main>
+                    <div class="file-select">
+                        <label for="example-load">Load Example:</label>
+                        <select name="example-load" id="example-load">
+                            <option value="">None</option>
+                        </select>
+                    </div>
+
+                    <div class="file-select">
+                        <label for="file-load">Load File:</label>
+                        <input type="file" name="file-load" id="file-load" accept="application/json">
+                    </div>
+                </main>
+            <footer>
+                <button onclick="togglePopup('load-popup');">Cancel</button>
+            </footer>
+        </div>
+    </div>
 </body>
 </html>

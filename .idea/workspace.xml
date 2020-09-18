@@ -11,10 +11,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9bf58e0b-034f-4fcc-8540-18bb688e4b0c" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/Game-of-Life.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Game-of-Life.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/main.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/gameoflife.js" beforeDir="false" afterPath="$PROJECT_DIR$/modules/gameoflife.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,6 +58,7 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs.cucumber.cucumber_node_package_dir" value="" />
+    <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RunManager">
     <configuration default="true" type="js.build_tools.grunt">
@@ -89,7 +92,10 @@
       <workItem from="1600110974709" duration="4085000" />
       <workItem from="1600162656378" duration="9829000" />
       <workItem from="1600191058636" duration="3689000" />
-      <workItem from="1600250928953" duration="6938000" />
+      <workItem from="1600250928953" duration="8009000" />
+      <workItem from="1600339127128" duration="3859000" />
+      <workItem from="1600423315070" duration="938000" />
+      <workItem from="1600424331184" duration="6809000" />
     </task>
     <task id="LOCAL-00001" summary="Implement cell drawing">
       <created>1600079415099</created>
@@ -121,10 +127,10 @@
     <option name="LAST_COMMIT_MESSAGE" value="Implement cell drawing" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="906" y="378" key="#Inspections" timestamp="1600007299380">
+    <state x="906" y="378" key="#Inspections" timestamp="1600427760700">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="906" y="378" key="#Inspections/0.0.2560.1400/2560.162.1920.1040@0.0.2560.1400" timestamp="1600007299380" />
+    <state x="906" y="378" key="#Inspections/0.0.2560.1400/2560.162.1920.1040@0.0.2560.1400" timestamp="1600427760700" />
     <state x="734" y="354" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1600015887360">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>

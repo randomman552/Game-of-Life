@@ -130,24 +130,24 @@ export class Cell{
 }
 
 //TODO: Fix bug on canvas background for zooming below a scalar 0.3
-//TODO: Add example loading
 
 /**
  * Class representing the game
- * Requires a canvas with the id 'canvas' as part of the DOM, this is where all cells will be drawn.
  */
 export class GameOfLife {
     /**
      * Stores information on all cells in the game.
-     * @type {{next: Cell[], checked: Set, live: Cell[]}}
+     * @type {{next: Cell[], checked: Set, live: Cell[], generation: number}}
      * @property {Cell[]} live Array containing all live cells.
      * @property {Cell[]} next Array containing the live cells for the next generation.
      * @property {Set} checked Set containing all checked cells for this generation (as strings).
+     * @property {number} generation The current generation of cells.
      */
     cells = {
         live: [],
         next: [],
-        checked: new Set()
+        checked: new Set(),
+        generation: 0
     }
 
 
@@ -197,6 +197,11 @@ export class GameOfLife {
             canvas.height = document.documentElement.clientHeight;
         });
         window.dispatchEvent(new Event("resize"));
+
+        //Add canvas interaction event listeners (click etc)
+        canvas.addEventListener("pointerdown", (e) => {
+           this.clickAction(e);
+        });
     }
 
 
@@ -224,6 +229,7 @@ export class GameOfLife {
         this.cells.live = this.cells.next;
         this.cells.next = [];
         this.cells.checked.clear();
+        this.cells.generation++;
     }
 
 
@@ -265,6 +271,13 @@ export class GameOfLife {
         ctx.fill();
         ctx.stroke();
 
+        ctx.closePath();
+
+        //Draw the current generation number on the canvas
+        ctx.beginPath();
+        ctx.font = "20px Open Sans";
+        ctx.fillStyle = "black";
+        ctx.fillText(`Generation: ${this.cells.generation}`, 5, 20);
         ctx.closePath();
     }
 
@@ -345,7 +358,7 @@ export class GameOfLife {
 
     /**
      * Game click action
-     * @param e {MouseEvent}
+     * @param e {PointerEvent}
      */
     clickAction(e) {
         //Calculate draw offset
@@ -450,6 +463,11 @@ export class GameOfLife {
      * @param toLoad {{cells: Cell[], camera: {pos: {x: number, y: number}, zoom: number}}}
      */
     load(toLoad) {
+        //Convert generic objects into cells before loading them
+        for (let i = 0; i < toLoad.cells.length; i++) {
+            toLoad.cells[i] = new Cell(toLoad.cells[i].x, toLoad.cells[i].y);
+        }
+
         this.cells.next = toLoad.cells;
         this.camera.pos = toLoad.camera.pos;
 
@@ -458,6 +476,7 @@ export class GameOfLife {
 
         //Update cells to reset the cell states
         this.updateCells();
+        this.cells.generation = 0;
 
         //Re-draw the current frame to show the user the updated game state
         this.drawFrame();
@@ -484,12 +503,19 @@ export class GameOfLife {
 
 
     /**
-     * Clear the game board
+     * Clear the game board and reset the cameras position.
      */
-    clear() {
-       this.cells.next = [];
-       this.updateCells();
-       this.drawFrame();
+    reset() {
+        this.cells.next = [];
+        this.camera.pos = {
+            x: 0,
+            y: 0
+        };
+        this.setCameraZoom(1);
+
+        this.updateCells();
+        this.cells.generation = 0;
+        this.drawFrame();
     }
 }
 

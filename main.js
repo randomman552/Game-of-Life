@@ -1,4 +1,5 @@
-import { Cell, GameOfLife } from "./modules/gameoflife.js"
+import { GameOfLife } from "./modules/gameoflife.js"
+import { examples } from "./modules/examples.js";
 
 const canvas = document.getElementById("canvas");
 let game = new GameOfLife(canvas);
@@ -118,15 +119,6 @@ canvas.addEventListener("wheel", (e) => {
 //#endregion
 
 
-//#region Canvas click event binding
-
-document.getElementById("canvas").addEventListener("pointerdown", (e) => {
-   game.clickAction(e);
-});
-
-//#endregion
-
-
 //#region Save functionality
 
 const saveButton = document.getElementById("save");
@@ -150,35 +142,45 @@ saveButton.addEventListener("click", () => {
 
 //#region Load functionality
 
-const loadButton = document.getElementById("load");
 
-loadButton.addEventListener("click", () => {
-    //Create file input so we can open file dialog
-    const fileIn = document.createElement("input");
-    fileIn.type = "file";
-    fileIn.accept = "application/json"
+const loadPopup = document.getElementById("load-popup");
 
-    //Attach event handler to load the game state when the opened file is read.
-    fileIn.addEventListener("change", () => {
-        const fr = new FileReader();
-        fr.readAsText(fileIn.files[0])
+//File load functionality
+const fileLoad = document.getElementById("file-load");
 
-        //Once the file reader has read the contents of the file, load them into the game
-        fr.onload = function() {
-            const toLoad = JSON.parse(fr.result);
+//Attach event handler to load the game state when a file is selected by the user
+fileLoad.addEventListener("change", () => {
+    const fr = new FileReader();
+    fr.readAsText(fileLoad.files[0])
 
-            //Convert generic objects into cells before loading them
-            for (let i = 0; i < toLoad.cells.length; i++) {
-                toLoad.cells[i] = new Cell(toLoad.cells[i].x, toLoad.cells[i].y);
-            }
+    //Once the file reader has read the contents of the file, load them into the game
+    fr.onload = function() {
+        const toLoad = JSON.parse(fr.result);
 
-            game.load(toLoad);
-        };
-    });
+        game.load(toLoad);
 
-    //Open file dialog
-    fileIn.click();
+        loadPopup.parentElement.classList.toggle("open");
+    };
 });
+
+//Example loading functionality
+const exampleLoad = document.getElementById("example-load");
+
+exampleLoad.addEventListener("change", () => {
+    if (exampleLoad.value in examples) {
+        game.load(examples[exampleLoad.value]);
+        loadPopup.parentElement.classList.toggle("open");
+    }
+});
+
+//Add each of the examples to the example load select
+for (const example in examples) {
+    const option = document.createElement("option");
+    option.value = example;
+    option.innerText = example;
+
+    exampleLoad.appendChild(option);
+}
 
 //#endregion
 
@@ -188,7 +190,7 @@ loadButton.addEventListener("click", () => {
 const clearButton = document.getElementById("clear");
 
 clearButton.addEventListener("click", () => {
-   game.clear();
+   game.reset();
 });
 
 //#endregion
