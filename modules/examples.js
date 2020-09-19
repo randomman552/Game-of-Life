@@ -1,3 +1,12 @@
+/**
+ * This file contains the examples object, which contains examples for the game of life.
+ */
+
+/**
+ * This examples object contains a series of examples which can be loaded by the game.
+ * They can be loaded by calling the .load method, and passing one of the objects contents into it.
+ * If you wish to add one you simply need to add one to the object in the same format as the others.
+ */
 export const examples = {
     "Gosper's glider gun" : {
         "cells": [

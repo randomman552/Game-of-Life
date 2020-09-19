@@ -11,12 +11,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9bf58e0b-034f-4fcc-8540-18bb688e4b0c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Game-of-Life.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Game-of-Life.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/examples.js" beforeDir="false" afterPath="$PROJECT_DIR$/modules/examples.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/gameoflife.js" beforeDir="false" afterPath="$PROJECT_DIR$/modules/gameoflife.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,7 +92,8 @@
       <workItem from="1600250928953" duration="8009000" />
       <workItem from="1600339127128" duration="3859000" />
       <workItem from="1600423315070" duration="938000" />
-      <workItem from="1600424331184" duration="6809000" />
+      <workItem from="1600424331184" duration="7526000" />
+      <workItem from="1600548730493" duration="1315000" />
     </task>
     <task id="LOCAL-00001" summary="Implement cell drawing">
       <created>1600079415099</created>

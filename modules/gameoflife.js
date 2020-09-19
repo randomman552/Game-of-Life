@@ -1,3 +1,10 @@
+/**
+ * This file contains all code for the game. It contains two classes:
+ *  the Cell class - Represents a cell on the game board.
+ *  the GameOfLife class - Represents the game.
+ */
+
+
 //#region Game Code
 
 /**
